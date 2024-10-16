@@ -11,7 +11,6 @@ def compute_image_hash(image_path):
         img = img.convert("RGB")
         # Compute perceptual hash (phash)
         img_hash = imagehash.phash(img)  # Perceptual hash
-        print("line:16", img_hash)
         return img_hash  # Return as an imagehash object for comparison
 
 def compare_image_hashes(hash1, hash2, threshold=0.5):

@@ -45,9 +45,8 @@ def main():
  
 
 if __name__ == "__main__":
-    # clear_database()
+    clear_database()
     # clear_events()
     capture_image_from_camera()  
     
     main()
-    print("line:53", get_all_events())

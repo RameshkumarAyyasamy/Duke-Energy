@@ -1,32 +1,14 @@
 [
     {
-        "event_id": "19119941-c05e-41f8-92be-8c54e424e2b9",
-        "timestamp": "2024-10-16T15:47:31",
-        "event_url": "./captured_images/19119941-c05e-41f8-92be-8c54e424e2b9.png",
+        "event_id": "97181b8d-22b5-4f71-8cfc-e3d20286143c",
+        "timestamp": "2024-10-16T17:12:59",
+        "event_url": "./captured_images/97181b8d-22b5-4f71-8cfc-e3d20286143c.png",
         "SubstationId": "Substation1"
     },
     {
-        "event_id": "c3a5cd60-7fdf-4176-9a5b-9b02c0b3983e",
-        "timestamp": "2024-10-16T15:47:49",
-        "event_url": "./captured_images/c3a5cd60-7fdf-4176-9a5b-9b02c0b3983e.png",
-        "SubstationId": "Substation1"
-    },
-    {
-        "event_id": "2228e25d-94eb-4014-bec5-08f3a6bd2fbc",
-        "timestamp": "2024-10-16T15:48:27",
-        "event_url": "./captured_images/2228e25d-94eb-4014-bec5-08f3a6bd2fbc.png",
-        "SubstationId": "Substation2"
-    },
-    {
-        "event_id": "50a1e34b-a854-4702-be1d-29e67a4d56a7",
-        "timestamp": "2024-10-16T15:49:22",
-        "event_url": "./captured_images/50a1e34b-a854-4702-be1d-29e67a4d56a7.png",
-        "SubstationId": "Substation1"
-    },
-    {
-        "event_id": "e1b9fb96-581b-48fb-a5b1-d33de4dcf983",
-        "timestamp": "2024-10-16T15:49:53",
-        "event_url": "./captured_images/e1b9fb96-581b-48fb-a5b1-d33de4dcf983.png",
+        "event_id": "43131883-4342-45d7-9c2f-fe5194a28da6",
+        "timestamp": "2024-10-16T17:13:06",
+        "event_url": "./captured_images/43131883-4342-45d7-9c2f-fe5194a28da6.png",
         "SubstationId": "Substation1"
     }
 ]

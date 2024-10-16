@@ -1,6 +1,6 @@
 Install the required packages:
 Python 3.9.6
-pip3
+pip
 imagehash
 Pillow
 requests==2.32.3
