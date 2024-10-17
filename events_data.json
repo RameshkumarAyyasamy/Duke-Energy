@@ -1,14 +1,1 @@
-[
-    {
-        "event_id": "97181b8d-22b5-4f71-8cfc-e3d20286143c",
-        "timestamp": "2024-10-16T17:12:59",
-        "event_url": "./captured_images/97181b8d-22b5-4f71-8cfc-e3d20286143c.png",
-        "SubstationId": "Substation1"
-    },
-    {
-        "event_id": "43131883-4342-45d7-9c2f-fe5194a28da6",
-        "timestamp": "2024-10-16T17:13:06",
-        "event_url": "./captured_images/43131883-4342-45d7-9c2f-fe5194a28da6.png",
-        "SubstationId": "Substation1"
-    }
-]
+[]

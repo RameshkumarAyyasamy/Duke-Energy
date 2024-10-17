@@ -4,6 +4,7 @@ pip
 imagehash
 Pillow
 requests==2.32.3
+pytesseract
 
 
 DB:

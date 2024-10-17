@@ -17,13 +17,12 @@ def main():
     with open(json_file_path, 'r') as file:
         events_data = json.load(file)
 
-        # print("Events data loaded: ", events_data)
-
     for event in events_data:
         event_id = event["event_id"]
         substation_id = event["SubstationId"]
         image_url = event["event_url"]
         timestamp = datetime.strptime(event["timestamp"], "%Y-%m-%dT%H:%M:%S")
+        event_type = event.get("event_type", "face")  # Default to face if no type is provided
         save_path = os.path.join(save_directory, f"{event_id}_.png")
         
         # Ensure the image exists at the given path
@@ -35,18 +34,17 @@ def main():
 
         snapshot_path = save_path
 
-        # Check for duplicates or threats
-        event_status = check_event(event_id, timestamp, substation_id, snapshot_path)
-        if event_status == "No duplicate or threat found":
-            store_event(event_id, substation_id, snapshot_path, timestamp)
-            print(f"Event {event_id} stored successfully at {timestamp}.")
+        # Check for duplicates or threats based on event type (face or license plate)
+        event_status = check_event(event_id, timestamp, substation_id, snapshot_path, event_type)
+        
+        if event_status is None or "Duplicate" not in event_status:
+            store_event(event_id, substation_id, snapshot_path, timestamp, event_type)
+            print(f"{event_type.capitalize()} event {event_id} stored successfully at {timestamp} and it's a {event_status}")
         else:
-            print(f"{event_status} for ID: {event_id} at {timestamp}")
- 
+            print(f"{event_status} for ID: {event_id} at {timestamp}.")
 
 if __name__ == "__main__":
+    # print(get_all_events())
     clear_database()
-    # clear_events()
-    capture_image_from_camera()  
-    
-    main()
+    # capture_image_from_camera()  
+    # main()

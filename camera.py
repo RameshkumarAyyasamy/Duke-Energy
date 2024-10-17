@@ -2,10 +2,14 @@ import cv2
 import os
 import json
 import uuid
+import pytesseract  # For license plate detection
 from datetime import datetime
 
 # File where events will be stored
 json_file_path = 'events_data.json'
+
+# Load Haar Cascade for face detection (you can download this file from OpenCV GitHub)
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 def capture_image_from_camera(save_directory='./captured_images'):
     """Capture an image from the camera and save it to the folder."""
@@ -37,8 +41,11 @@ def capture_image_from_camera(save_directory='./captured_images'):
             cv2.imwrite(save_path, frame)
             print(f"Image saved to {save_path}")
 
+            # Detect if the image contains a face or a license plate
+            event_type = detect_event_type(frame)
+
             # Add the image event to the JSON data in events_data.json
-            add_image_event_to_json(event_id, timestamp, save_path)
+            add_image_event_to_json(event_id, timestamp, save_path, event_type)
             image_captured = True  # Mark that an image was captured
 
             # Exit the loop after saving the image
@@ -57,13 +64,38 @@ def capture_image_from_camera(save_directory='./captured_images'):
     else:
         print("Image capture completed successfully.")
 
-def add_image_event_to_json(event_id, timestamp, image_path, substation_id="Substation1"):
+def detect_event_type(frame):
+    """Detect whether the image contains a face or a license plate."""
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Check for license plates in the image using Tesseract
+    text = pytesseract.image_to_string(frame)
+    if is_license_plate(text):
+        return "license_plate"
+    # Check for faces in the image
+    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+    if len(faces) > 0:
+        return "face"
+
+    
+
+    # If no face or license plate is detected
+    return "unknown"
+
+def is_license_plate(text):
+    """Simple heuristic to check if the detected text is a license plate."""
+    if len(text) >= 0 and any(char.isdigit() for char in text):
+        return True
+    return False
+
+def add_image_event_to_json(event_id, timestamp, image_path, event_type, substation_id="Substation1"):
     """Add a new image event to the JSON data in events_data.json."""
     new_event = {
         "event_id": event_id,
         "timestamp": timestamp,
         "event_url": image_path,
-        "SubstationId": substation_id
+        "SubstationId": substation_id,
+        "event_type": event_type
     }
 
     # Check if the JSON file exists; if not, create an empty list
@@ -81,8 +113,5 @@ def add_image_event_to_json(event_id, timestamp, image_path, substation_id="Subs
     with open(json_file_path, 'w') as file:
         json.dump(events_data, file, indent=4)
 
-    print(f"Event {event_id} added with timestamp {timestamp}.")
+    print(f"Event {event_id} added with timestamp {timestamp} and event type {event_type}.")
 
-if __name__ == "__main__":
-    # Capture image and update events_data.json
-    capture_image_from_camera(save_directory='./localSnap')
