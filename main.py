@@ -10,7 +10,7 @@ from mock import json_data
 json_file_path = 'events_data.json'
 
 def main():
-    save_directory = "./localSnap"  # Directory for saving snapshots
+    save_directory = "./localSnap"  # Directory for saving snapshots https://picsum.photos
     os.makedirs(save_directory, exist_ok=True)  # Create the directory if it doesn't exist
 
     # Read the event data from the JSON file
@@ -44,7 +44,7 @@ def main():
             print(f"{event_status} for ID: {event_id} at {timestamp}.")
 
 if __name__ == "__main__":
-    # print(get_all_events())
+    print(get_all_events())
     clear_database()
     # capture_image_from_camera()  
     # main()
