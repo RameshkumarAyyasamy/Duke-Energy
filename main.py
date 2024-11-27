@@ -1,11 +1,9 @@
 import os
-import uuid
 import json
 from datetime import datetime
 from camera import capture_image_from_camera
 from event_processing import check_event
-from database import store_event, clear_database, clear_events, get_all_events
-from mock import json_data
+from database import create_table, store_event, clear_database, get_all_events
 
 json_file_path = 'events_data.json'
 
@@ -32,19 +30,18 @@ def main():
             print(f"Image not found at {image_url}, skipping event {event_id}.")
             continue
 
-        snapshot_path = save_path
-
         # Check for duplicates or threats based on event type (face or license plate)
-        event_status = check_event(event_id, timestamp, substation_id, snapshot_path, event_type)
+        event_status = check_event(event_id, timestamp, substation_id, save_path, event_type)
         
         if event_status is None or "Duplicate" not in event_status:
-            store_event(event_id, substation_id, snapshot_path, timestamp, event_type)
+            store_event(event_id, substation_id, save_path, timestamp, event_type)
             print(f"{event_type.capitalize()} event {event_id} stored successfully at {timestamp} and it's a {event_status}")
         else:
             print(f"{event_status} for ID: {event_id} at {timestamp}.")
 
 if __name__ == "__main__":
-    print(get_all_events())
+    get_all_events()
     clear_database()
-    # capture_image_from_camera()  
-    # main()
+    create_table()
+    capture_image_from_camera()  
+    main()

@@ -1,7 +1,6 @@
 import requests
-import os  # Import os to manage directories
 
-def pull_snapshot(event_url, save_path):
+def pull_snapshot(event_url, save_path="./captured_images"):
     """Pull a snapshot from the given URL and save it locally."""
     try:
         response = requests.get(event_url)
