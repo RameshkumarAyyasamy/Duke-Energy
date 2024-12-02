@@ -1,5 +1,4 @@
 import sqlite3
-from event_filters import filter_face_events, filter_license_plate_events
 
 def create_table():
     """Creates a table to store events"""
@@ -22,13 +21,29 @@ def store_event(event_id, substation, snapshot_path, event_time, event_type):
     conn.close()
 
 
-def find_common_events():
+def find_common_events(substation_id, event_type):
     """Finds and returns common events from the database, optionally filtered."""
     conn = sqlite3.connect('surveillance.db')
     cursor = conn.cursor()
     
-    # Get all events
-    cursor.execute('SELECT id, substation, snapshot_path, event_time, event_type FROM events')
+    query = 'SELECT id, substation, snapshot_path, event_time, event_type FROM events'
+    params = []
+    filters = []
+
+    # Add conditions dynamically based on provided arguments
+    if substation_id is not None and substation_id != "server":
+        filters.append('substation = ?')
+        params.append(substation_id)
+    
+    if event_type is not None:
+        filters.append('event_type = ?')
+        params.append(event_type)
+    
+    # Add filters to the query if any
+    if filters:
+        query += ' WHERE ' + ' AND '.join(filters)
+
+    cursor.execute(query, params)
     events = cursor.fetchall()
 
     # Check if any events were retrieved
@@ -48,16 +63,10 @@ def find_common_events():
         for event in events
     ]
 
-    # Filter face events
-    filtered_faces = filter_face_events(events_dicts)
-    
-    # Filter license plate events
-    filtered_plates = filter_license_plate_events(events_dicts)
-    
     conn.close()
     
     # Return filtered results, or process them further
-    return filtered_faces, filtered_plates
+    return events_dicts
 
 def get_all_events():
     """Retrieves all events from the database for debugging."""

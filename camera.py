@@ -5,15 +5,12 @@ import uuid
 import pytesseract  # For license plate detection
 from datetime import datetime
 
-# File where events will be stored
-json_file_path = 'events_data.json'
-
 # Load Haar Cascade for face detection (you can download this file from OpenCV GitHub)
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-def capture_image_from_camera(save_directory='./captured_images'):
+def capture_image_from_camera(substation_id):
     """Capture an image from the camera and save it to the folder."""
-    os.makedirs(save_directory, exist_ok=True)
+    os.makedirs(substation_id, exist_ok=True)
     cap = cv2.VideoCapture(0)
 
     if not cap.isOpened():
@@ -36,7 +33,7 @@ def capture_image_from_camera(save_directory='./captured_images'):
             event_id = str(uuid.uuid4())
             timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
             image_name = f"{event_id}.png"
-            save_path = os.path.join(save_directory, image_name)
+            save_path = os.path.join(substation_id, image_name)
 
             cv2.imwrite(save_path, frame)
             print(f"Image saved to {save_path}")
@@ -44,8 +41,8 @@ def capture_image_from_camera(save_directory='./captured_images'):
             # Detect if the image contains a face or a license plate
             event_type = detect_event_type(frame)
 
-            # Add the image event to the JSON data in events_data.json
-            add_image_event_to_json(event_id, timestamp, save_path, event_type)
+            # Add the image event to the JSON data to respective substation
+            add_image_event_to_json(event_id, timestamp, save_path, event_type, substation_id)
             image_captured = True  # Mark that an image was captured
 
             # Exit the loop after saving the image
@@ -88,7 +85,7 @@ def is_license_plate(text):
         return True
     return False
 
-def add_image_event_to_json(event_id, timestamp, image_path, event_type, substation_id="Substation1"):
+def add_image_event_to_json(event_id, timestamp, image_path, event_type, substation_id):
     """Add a new image event to the JSON data in events_data.json."""
     new_event = {
         "event_id": event_id,
@@ -99,18 +96,18 @@ def add_image_event_to_json(event_id, timestamp, image_path, event_type, substat
     }
 
     # Check if the JSON file exists; if not, create an empty list
-    if not os.path.exists(json_file_path):
+    if not os.path.exists(f'{substation_id}.json'):
         events_data = []
     else:
-        # Load existing data from events_data.json
-        with open(json_file_path, 'r') as file:
+        # Load existing data from respective substation
+        with open(f'{substation_id}.json', 'r') as file:
             events_data = json.load(file)
 
     # Append the new event to the data
     events_data.append(new_event)
 
-    # Write the updated data back to events_data.json
-    with open(json_file_path, 'w') as file:
+    # Write the updated data back to respective substation
+    with open(f'{substation_id}.json', 'w') as file:
         json.dump(events_data, file, indent=4)
 
     print(f"Event {event_id} added with timestamp {timestamp} and event type {event_type}.")
